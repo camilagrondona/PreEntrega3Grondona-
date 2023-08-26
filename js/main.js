@@ -61,7 +61,7 @@ const productos = [
         id: 9,
         nombre: "Funko Pop! Star Wars  - Chewbacca",
         precio: 30990,
-        imagen: "https://troopertoys.com/26390-large_default/funko-pop-star-wars-episode-iv-a-new-hope-chewbacca-596.jpg",
+        imagen: "./img/chewbacca.jpg",
         categoria: "Star Wars"
     },
     {
@@ -87,18 +87,15 @@ const productos = [
     },
     ];
     
-    JSON.parse(localStorage.getItem("productos")) || localStorage.setItem("productos", JSON.stringify(productos));    
 
 // Inicio
 
 const userLogin = document.getElementById("userLogin")
 const divProductos = document.getElementById("productos")
 
-let productosDisponibles = JSON.parse(localStorage.getItem("productos"))
-
 document.addEventListener("DOMContentLoaded", () => {
     // Función para crear las cards de mis productos
-    generarCardsProductos(productosDisponibles)
+    generarCardsProductos(productos)
 })
 
 const generarCardsProductos = (productos) => {
