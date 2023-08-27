@@ -102,7 +102,7 @@ const generarCardsProductos = (productos) => {
     divProductos.innerHTML = "";
 
     productos.forEach((producto) => {
-
+// Card productos
         let card = document.createElement("div");
         card.className = "producto";
         card.innerHTML = `
@@ -121,14 +121,41 @@ const generarCardsProductos = (productos) => {
         const btnComprar = document.getElementById(`comprar${producto.id}`)
         // Función del carrito
         btnComprar.addEventListener("click", () => comprarProducto(producto.id))
-
-
     });
 };
 
 // Carrito 
 
+JSON.parse(sessionStorage.getItem("carrito")) === null && sessionStorage.setItem("carrito", JSON.stringify([]))
 
+let carrito = JSON.parse(sessionStorage.getItem("carrito"))
+const comprarProducto = (idProducto) => {
+    const productosDisponibles = productos.find ((producto) => producto.id === idProducto)
+    const productoCarrito = carrito.find((producto) => producto.id === idProducto)
+    if (productoCarrito === undefined){
+        const nuevoProductoCarrito = {
+            id: productosDisponibles.id,
+            nombre: productosDisponibles.nombre,
+            precio: productosDisponibles.precio,
+            imagen: productosDisponibles.imagen,
+            cantidad: 1
+        }
+        
+        carrito.push(nuevoProductoCarrito)
+
+        sessionStorage.setItem("carrito", JSON.stringify(carrito))
+    } else {
+        const indexProductoCarrito = carrito.findIndex((producto) => producto.id === idProducto)
+
+        carrito[indexProductoCarrito].cantidad++
+        carrito[indexProductoCarrito].precio = productosDisponibles.precio * carrito[indexProductoCarrito].cantidad
+
+        sessionStorage.setItem("carrito", JSON.stringify(carrito))
+    }
+    carrito = JSON.parse(sessionStorage.getItem("carrito"))
+
+    alert(`Compraste el producto ${productosDisponibles.nombre}`)
+}
 // Usuarios
 
 let dataBaseUsers = [
