@@ -1,4 +1,4 @@
-// Productos
+// Array productos
 
 const productos = [
     {
@@ -86,7 +86,8 @@ const productos = [
         categoria: "Star Wars"
     },
 ];
-/*Funciones del Carrito */
+
+//Funciones del Carrito:
 
 // Función dibujar Carrito
 
@@ -106,10 +107,11 @@ const dibujarCarrito = () => {
     <td>${precio / cantidad}</td>
     <td>${precio}</td>
     <td>
-    <button id="+${id}" class="btn btn-success">+</button>
-    <button id="-${id}" class="btn btn-danger">-</button>
+    <button id="+${id}">+</button> 
+    <button id="-${id}">-</button>
     </td>
     `
+        // Los botones de más y menos aún no funcionan porque seguiré desarrollando para el proyecto final 
 
         listaCarrito.append(body)
 
@@ -143,7 +145,7 @@ const dibujarFooter = () => {
 
         footCarrito.append(footer)
     } else {
-        footCarrito.innerHTML = "<h3> No agregaste productos al carrito</h3>"
+        footCarrito.innerHTML = "<h3> No agregaste productos al carrito </h3>"
     }
 
 }
@@ -160,9 +162,8 @@ const generarTotales = () => {
     }
 }
 
-// Inicio
+// Inicio (productos)
 
-const userLogin = document.getElementById("userLogin")
 const divProductos = document.getElementById("productos")
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -198,68 +199,7 @@ const generarCardsProductos = (productos) => {
 
 // Carrito 
 
-JSON.parse(sessionStorage.getItem("carrito")) === null && sessionStorage.setItem("carrito", JSON.stringify([]))
-
-// Agregar productos al carrito 
-
-const comprarProducto = (idProducto) => {
-    const productosDisponibles = productos.find((producto) => producto.id === idProducto)
-    const productoCarrito = carrito.find((producto) => producto.id === idProducto)
-    if (productoCarrito === undefined) {
-        const nuevoProductoCarrito = {
-            id: productosDisponibles.id,
-            nombre: productosDisponibles.nombre,
-            precio: productosDisponibles.precio,
-            imagen: productosDisponibles.imagen,
-            cantidad: 1
-        }
-
-        carrito.push(nuevoProductoCarrito)
-
-        sessionStorage.setItem("carrito", JSON.stringify(carrito))
-    } else {
-        const indexProductoCarrito = carrito.findIndex((producto) => producto.id === idProducto)
-
-        carrito[indexProductoCarrito].cantidad++
-        carrito[indexProductoCarrito].precio = productosDisponibles.precio * carrito[indexProductoCarrito].cantidad
-
-        sessionStorage.setItem("carrito", JSON.stringify(carrito))
-    }
-    carrito = JSON.parse(sessionStorage.getItem("carrito"))
-
-    alert(`Compraste el producto ${productosDisponibles.nombre}`)
-
-    // Aumentar la cantidad en el carrito 
-
-    const aumentarCantidad = (id) => {
-        const indexProductoCarrito = carrito.findIndex((producto) => producto.id === id)
-        const precio = carrito[indexProductoCarrito].precio / carrito[indexProductoCarrito].cantidad
-
-        carrito[indexProductoCarrito].cantidad++
-        carrito[indexProductoCarrito].precio = precio * carrito[indexProductoCarrito].cantidad
-
-        sessionStorage.setItem("carrito", JSON.stringify(carrito))
-        dibujarCarrito()
-
-    }
-
-    // Restar la cantidad en el carrito 
-
-    const restarCantidad = (id) => {
-        const indexProductoCarrito = carrito.findIndex((producto) => producto.id === id)
-        const precio = carrito[indexProductoCarrito].precio / carrito[indexProductoCarrito].cantidad
-
-        carrito[indexProductoCarrito].cantidad--
-        carrito[indexProductoCarrito].precio = precio * carrito[indexProductoCarrito].cantidad
-
-        if (carrito[indexProductoCarrito].cantidad === 0) {
-            carrito.splice(indexProductoCarrito, 1)
-        }
-
-        sessionStorage.setItem("carrito", JSON.stringify(carrito))
-        dibujarCarrito()
-    }
-}
+JSON.parse(localStorage.getItem("carrito")) === null && localStorage.setItem("carrito", JSON.stringify([]))
 
 //Dibujar tabla carrito 
 
@@ -267,7 +207,7 @@ document.addEventListener("DOMContentLoaded", () => {
     dibujarCarrito();
 });
 
-let carrito = JSON.parse(sessionStorage.getItem("carrito"))
+let carrito = JSON.parse(localStorage.getItem("carrito"))
 
 const listaCarrito = document.getElementById("items")
 const footCarrito = document.getElementById("totales")
@@ -285,15 +225,31 @@ btnCarrito.addEventListener("click", () => {
     }
 })
 
-// Usuarios
+// Agregar productos al carrito 
 
-let dataBaseUsers = [
-    {
-        id: 1,
-        user: "Camila",
-        pass: "37031852",
-        admin: true,
-    },
-];
+const comprarProducto = (idProducto) => {
+    const productosDisponibles = productos.find((producto) => producto.id === idProducto)
+    const productoCarrito = carrito.find((producto) => producto.id === idProducto)
+    if (productoCarrito === undefined) {
+        const nuevoProductoCarrito = {
+            id: productosDisponibles.id,
+            nombre: productosDisponibles.nombre,
+            precio: productosDisponibles.precio,
+            imagen: productosDisponibles.imagen,
+            cantidad: 1
+        }
 
-JSON.parse(localStorage.getItem("usuarios")) || localStorage.setItem("usuarios", JSON.stringify(dataBaseUsers));
+        carrito.push(nuevoProductoCarrito)
+
+        localStorage.setItem("carrito", JSON.stringify(carrito))
+    } else {
+        const indexProductoCarrito = carrito.findIndex((producto) => producto.id === idProducto)
+
+        carrito[indexProductoCarrito].cantidad++
+        carrito[indexProductoCarrito].precio = productosDisponibles.precio * carrito[indexProductoCarrito].cantidad
+
+        localStorage.setItem("carrito", JSON.stringify(carrito))
+    }
+    carrito = JSON.parse(localStorage.getItem("carrito"))
+
+    alert(`Compraste el producto ${productosDisponibles.nombre}`)}

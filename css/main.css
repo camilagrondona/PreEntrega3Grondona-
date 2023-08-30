@@ -1,9 +1,3 @@
-#filter__input{
-    display: block; 
-    margin: auto; 
-    width: 40%
-}
-
 #carrito{
     display: none;
     position: fixed;
@@ -12,7 +6,5 @@
     width: 30%;
     height: auto;
     background-color: whitesmoke;
-    z-index: 1001;
     color: rgb(42, 189, 123);
 }
-
