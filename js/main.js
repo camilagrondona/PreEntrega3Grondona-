@@ -106,20 +106,9 @@ const dibujarCarrito = () => {
     <td>${cantidad}</td>
     <td>${precio / cantidad}</td>
     <td>${precio}</td>
-    <td>
-    <button id="+${id}">+</button> 
-    <button id="-${id}">-</button>
-    </td>
     `
-        // Los botones de más y menos aún no funcionan porque seguiré desarrollando para el proyecto final 
 
         listaCarrito.append(body)
-
-        const btnAgregar = document.getElementById(`+${id}`)
-        const btnRestar = document.getElementById(`-${id}`)
-
-        btnAgregar.addEventListener("click", () => aumentarCantidad(id))
-        btnRestar.addEventListener("click", () => restarCantidad(id))
 
     });
 
