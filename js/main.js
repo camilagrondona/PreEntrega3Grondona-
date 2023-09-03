@@ -241,4 +241,8 @@ const comprarProducto = (idProducto) => {
     }
     carrito = JSON.parse(localStorage.getItem("carrito"))
 
-    alert(`Compraste el producto ${productosDisponibles.nombre}`)}
+    /*USAR SWEET ALERT!!!!!!!!!!!!!!!!!!!!*/
+    alert(`Compraste el producto ${productosDisponibles.nombre}`)
+}
+
+
