@@ -87,6 +87,12 @@ const productos = [
     },
 ];
 
+const divProductos = document.getElementById("productos")
+const listaCarrito = document.getElementById("items")
+const footCarrito = document.getElementById("totales")
+const btnCarrito = document.getElementById("btnCarrito")
+const carritoTable = document.getElementById("carrito")
+
 //Funciones del Carrito:
 
 // Función dibujar Carrito
@@ -97,19 +103,25 @@ const dibujarCarrito = () => {
     carrito.forEach((productosDisponibles) => {
         const { imagen, nombre, cantidad, precio, id } = productosDisponibles
         let body = document.createElement("tr")
-
         body.className = "producto__carrito"
-
         body.innerHTML = `
     <th><img id="fotoProductoCarrito" src="${imagen}" class="card-img-top" style="width:40%; height: 30%"</th>
     <td>${nombre}</td>
     <td>${cantidad}</td>
     <td>${precio / cantidad}</td>
     <td>${precio}</td>
+    <td>
+    <button id="+${id}">+</button>
+    <button id="-${id}">-</button>
+    </td>
     `
-
         listaCarrito.append(body)
 
+        const btnAgregar = document.getElementById(`+${id}`)
+        const btnRestar = document.getElementById(`-${id}`)
+
+        btnAgregar.addEventListener("click", () => aumentarCantidad(id))
+        btnRestar.addEventListener("click", () => restarCantidad(id))
     });
 
     dibujarFooter();
@@ -151,10 +163,6 @@ const generarTotales = () => {
     }
 }
 
-// Inicio (productos)
-
-const divProductos = document.getElementById("productos")
-
 document.addEventListener("DOMContentLoaded", () => {
     // Función para crear las cards de mis productos
     generarCardsProductos(productos)
@@ -163,8 +171,9 @@ document.addEventListener("DOMContentLoaded", () => {
 const generarCardsProductos = (productos) => {
     divProductos.innerHTML = "";
 
+// Card productos 
+
     productos.forEach((producto) => {
-        // Card productos
         let card = document.createElement("div");
         card.className = "producto";
         card.innerHTML = `
@@ -180,13 +189,43 @@ const generarCardsProductos = (productos) => {
 
         divProductos.appendChild(card);
 
+// Función del carrito comprar producto
         const btnComprar = document.getElementById(`comprar${producto.id}`)
-        // Función del carrito comprar producto
         btnComprar.addEventListener("click", () => comprarProducto(producto.id))
     });
 };
 
-// Carrito 
+// Aumentar la cantidad en el carrito 
+
+    const aumentarCantidad = (id) => {
+        const indexProductoCarrito = carrito.findIndex((producto) => producto.id === id)
+        const precio = carrito[indexProductoCarrito].precio / carrito[indexProductoCarrito].cantidad
+
+        carrito[indexProductoCarrito].cantidad++
+        carrito[indexProductoCarrito].precio = precio * carrito[indexProductoCarrito].cantidad
+
+        localStorage.setItem("carrito", JSON.stringify(carrito))
+        dibujarCarrito()
+
+    }
+
+    // Restar la cantidad en el carrito 
+
+    const restarCantidad = (id) => {
+        const indexProductoCarrito = carrito.findIndex((producto) => producto.id === id)
+        const precio = carrito[indexProductoCarrito].precio / carrito[indexProductoCarrito].cantidad
+
+        carrito[indexProductoCarrito].cantidad--
+        carrito[indexProductoCarrito].precio = precio * carrito[indexProductoCarrito].cantidad
+
+        if (carrito[indexProductoCarrito].cantidad === 0) {
+            carrito.splice(indexProductoCarrito, 1)
+        }
+
+        localStorage.setItem("carrito", JSON.stringify(carrito))
+        dibujarCarrito()
+    }
+
 
 JSON.parse(localStorage.getItem("carrito")) === null && localStorage.setItem("carrito", JSON.stringify([]))
 
@@ -197,11 +236,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 let carrito = JSON.parse(localStorage.getItem("carrito"))
-
-const listaCarrito = document.getElementById("items")
-const footCarrito = document.getElementById("totales")
-const btnCarrito = document.getElementById("btnCarrito")
-const carritoTable = document.getElementById("carrito")
 
 // Evento: si hago click sobre el carrito aparece la tabla
 
@@ -244,5 +278,4 @@ const comprarProducto = (idProducto) => {
     /*USAR SWEET ALERT!!!!!!!!!!!!!!!!!!!!*/
     alert(`Compraste el producto ${productosDisponibles.nombre}`)
 }
-
 
