@@ -171,7 +171,7 @@ document.addEventListener("DOMContentLoaded", () => {
 const generarCardsProductos = (productos) => {
     divProductos.innerHTML = "";
 
-// Card productos 
+    // Card productos 
 
     productos.forEach((producto) => {
         let card = document.createElement("div");
@@ -189,7 +189,7 @@ const generarCardsProductos = (productos) => {
 
         divProductos.appendChild(card);
 
-// Función del carrito comprar producto
+        // Función del carrito comprar producto
         const btnComprar = document.getElementById(`comprar${producto.id}`)
         btnComprar.addEventListener("click", () => comprarProducto(producto.id))
     });
@@ -197,34 +197,34 @@ const generarCardsProductos = (productos) => {
 
 // Aumentar la cantidad en el carrito 
 
-    const aumentarCantidad = (id) => {
-        const indexProductoCarrito = carrito.findIndex((producto) => producto.id === id)
-        const precio = carrito[indexProductoCarrito].precio / carrito[indexProductoCarrito].cantidad
+const aumentarCantidad = (id) => {
+    const indexProductoCarrito = carrito.findIndex((producto) => producto.id === id)
+    const precio = carrito[indexProductoCarrito].precio / carrito[indexProductoCarrito].cantidad
 
-        carrito[indexProductoCarrito].cantidad++
-        carrito[indexProductoCarrito].precio = precio * carrito[indexProductoCarrito].cantidad
+    carrito[indexProductoCarrito].cantidad++
+    carrito[indexProductoCarrito].precio = precio * carrito[indexProductoCarrito].cantidad
 
-        localStorage.setItem("carrito", JSON.stringify(carrito))
-        dibujarCarrito()
+    localStorage.setItem("carrito", JSON.stringify(carrito))
+    dibujarCarrito()
 
+}
+
+// Restar la cantidad en el carrito 
+
+const restarCantidad = (id) => {
+    const indexProductoCarrito = carrito.findIndex((producto) => producto.id === id)
+    const precio = carrito[indexProductoCarrito].precio / carrito[indexProductoCarrito].cantidad
+
+    carrito[indexProductoCarrito].cantidad--
+    carrito[indexProductoCarrito].precio = precio * carrito[indexProductoCarrito].cantidad
+
+    if (carrito[indexProductoCarrito].cantidad === 0) {
+        carrito.splice(indexProductoCarrito, 1)
     }
 
-    // Restar la cantidad en el carrito 
-
-    const restarCantidad = (id) => {
-        const indexProductoCarrito = carrito.findIndex((producto) => producto.id === id)
-        const precio = carrito[indexProductoCarrito].precio / carrito[indexProductoCarrito].cantidad
-
-        carrito[indexProductoCarrito].cantidad--
-        carrito[indexProductoCarrito].precio = precio * carrito[indexProductoCarrito].cantidad
-
-        if (carrito[indexProductoCarrito].cantidad === 0) {
-            carrito.splice(indexProductoCarrito, 1)
-        }
-
-        localStorage.setItem("carrito", JSON.stringify(carrito))
-        dibujarCarrito()
-    }
+    localStorage.setItem("carrito", JSON.stringify(carrito))
+    dibujarCarrito()
+}
 
 
 JSON.parse(localStorage.getItem("carrito")) === null && localStorage.setItem("carrito", JSON.stringify([]))
@@ -279,3 +279,32 @@ const comprarProducto = (idProducto) => {
     alert(`Compraste el producto ${productosDisponibles.nombre}`)
 }
 
+// Usuarios (Botones Login / Cerrar sesión)
+
+const userLogin = document.getElementById("userLogin")
+let usuarioLogeado = JSON.parse (sessionStorage.getItem("usuario"))
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    if (usuarioLogeado === null) {
+        const a = document.createElement("a")
+        a.href = "./html/usuarios.html"
+        a.innerHTML = "Login"
+        userLogin.appendChild(a)
+    } else {
+        const p = document.createElement("p")
+        const close = document.createElement("button")
+
+        p.innerHTML = `Bienvenido/a ${usuarioLogeado.user}`
+        close.id = "cerrar__sesion"
+        close.innerHTML = "Cerrar sesión"
+        close.addEventListener("click", () => {
+            alert(`¡Hasta pronto ${usuarioLogeado.user}!`)
+
+            sessionStorage.removeItem("usuario")
+            location.reload()
+        })
+        userLogin.appendChild(p)
+        userLogin.appendChild(close)
+    }
+    })
