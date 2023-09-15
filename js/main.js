@@ -93,6 +93,8 @@ const footCarrito = document.getElementById("totales")
 const btnCarrito = document.getElementById("btnCarrito")
 const carritoTable = document.getElementById("carrito")
 
+let productosDisponibles = productos
+
 //Funciones del Carrito:
 
 // Función dibujar Carrito
@@ -165,15 +167,15 @@ const generarTotales = () => {
 
 document.addEventListener("DOMContentLoaded", () => {
     // Función para crear las cards de mis productos
-    generarCardsProductos(productos)
+    generarCardsProductos(productosDisponibles)
 })
 
-const generarCardsProductos = (productos) => {
+const generarCardsProductos = (productosDisponibles) => {
     divProductos.innerHTML = "";
 
     // Card productos 
 
-    productos.forEach((producto) => {
+    productosDisponibles.forEach((producto) => {
         let card = document.createElement("div");
         card.className = "producto";
         card.innerHTML = `
@@ -251,7 +253,7 @@ btnCarrito.addEventListener("click", () => {
 // Agregar productos al carrito 
 
 const comprarProducto = (idProducto) => {
-    const productosDisponibles = productos.find((producto) => producto.id === idProducto)
+    let productosDisponibles = productos.find((producto) => producto.id === idProducto)
     const productoCarrito = carrito.find((producto) => producto.id === idProducto)
     if (productoCarrito === undefined) {
         const nuevoProductoCarrito = {
@@ -282,7 +284,7 @@ const comprarProducto = (idProducto) => {
 // Usuarios (Botones Login / Cerrar sesión)
 
 const userLogin = document.getElementById("userLogin")
-let usuarioLogeado = JSON.parse (sessionStorage.getItem("usuario"))
+let usuarioLogeado = JSON.parse(sessionStorage.getItem("usuario"))
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -307,5 +309,21 @@ document.addEventListener("DOMContentLoaded", () => {
         userLogin.appendChild(p)
         userLogin.appendChild(close)
     }
-    })
+})
 
+// Inicio
+
+const filterInput = document.getElementById("filter__input")
+
+// Filtros por input 
+
+    filterInput.addEventListener("keyup", (e) => {
+        const filtro = e.target.value.toLowerCase();
+
+        productosDisponibles = productos.filter((producto) => {
+            return producto.nombre.toLowerCase().includes(filtro);
+        });
+    
+        generarCardsProductos(productosDisponibles);
+    });
+    
