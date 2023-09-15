@@ -90,7 +90,7 @@ const validarYRegistrar = (nuevoUsuario) => {
         usuarios.push(nuevoUsuario)
         localStorage.setItem("usuarios", JSON.stringify(usuarios))
         sessionStorage.setItem("usuario", JSON.stringify(nuevoUsuario))
-        alert(`Gracias ${nuevoUsuario.user}por registrarte. Te redigiremos a la página principal`)
+        alert(`Gracias ${nuevoUsuario.user} por registrarte. Te redigiremos a la página principal`)
         location.href = "../index.html"       
     }else{
         alert(`El usuario ya existe`)
