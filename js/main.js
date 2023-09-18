@@ -191,7 +191,7 @@ const generarCardsProductos = (productosDisponibles) => {
 
         divProductos.appendChild(card);
 
-        // Función del carrito comprar producto
+// Función del carrito comprar producto
         const btnComprar = document.getElementById(`comprar${producto.id}`)
         btnComprar.addEventListener("click", () => comprarProducto(producto.id))
     });
@@ -277,68 +277,76 @@ const comprarProducto = (idProducto) => {
     }
     carrito = JSON.parse(localStorage.getItem("carrito"))
 
-    /*USAR SWEET ALERT!!!!!!!!!!!!!!!!!!!!*/
-    alert(`Compraste el producto ${productosDisponibles.nombre}`)
-}
+    // Sweet Alert Carrito
 
-// Usuarios (Botones Login / Cerrar sesión)
+    Swal.fire
+        ({
+            position: 'center',
+            icon: 'success',
+            title: 'Producto añadido con éxito',
+            showConfirmButton: false,
+            timer: 1500
+        })}
 
-const userLogin = document.getElementById("userLogin")
-let usuarioLogeado = JSON.parse(sessionStorage.getItem("usuario"))
+    // Usuarios (Botones Login / Cerrar sesión)
 
-document.addEventListener("DOMContentLoaded", () => {
+    const userLogin = document.getElementById("userLogin")
+    let usuarioLogeado = JSON.parse(sessionStorage.getItem("usuario"))
 
-    if (usuarioLogeado === null) {
-        const a = document.createElement("a")
-        a.href = "./html/usuarios.html"
-        a.innerHTML = "Login"
-        userLogin.appendChild(a)
-    } else {
-        const p = document.createElement("p")
-        const close = document.createElement("button")
+    document.addEventListener("DOMContentLoaded", () => {
 
-        p.innerHTML = `Bienvenido/a ${usuarioLogeado.user}`
-        close.id = "cerrar__sesion"
-        close.innerHTML = "Cerrar sesión"
-        close.addEventListener("click", () => {
-            alert(`¡Hasta pronto ${usuarioLogeado.user}!`)
+        if (usuarioLogeado === null) {
+            const a = document.createElement("a")
+            a.href = "./html/usuarios.html"
+            a.innerHTML = "Login"
+            userLogin.appendChild(a)
+        } else {
+            const p = document.createElement("p")
+            const close = document.createElement("button")
 
-            sessionStorage.removeItem("usuario")
-            location.reload()
-        })
-        userLogin.appendChild(p)
-        userLogin.appendChild(close)
-    }
-})
+            p.innerHTML = `Bienvenido/a ${usuarioLogeado.user}`
+            close.id = "cerrar__sesion"
+            close.innerHTML = "Cerrar sesión"
+            close.addEventListener("click", () => {
+                alert(`¡Hasta pronto ${usuarioLogeado.user}!`)
 
-// Filtros por input 
+                sessionStorage.removeItem("usuario")
+                location.reload()
+            })
+            userLogin.appendChild(p)
+            userLogin.appendChild(close)
+        }
+    })
 
-const filterInput = document.getElementById("filter__input")
+    // Filtros por input 
 
-filterInput.addEventListener("keyup", (e) => {
-    const filtro = e.target.value.toLowerCase();
+    const filterInput = document.getElementById("filter__input")
 
-    productosDisponibles = productos.filter((producto) => {
-        return producto.nombre.toLowerCase().includes(filtro);
+    filterInput.addEventListener("keyup", (e) => {
+        const filtro = e.target.value.toLowerCase();
+
+        productosDisponibles = productos.filter((producto) => {
+            return producto.nombre.toLowerCase().includes(filtro);
+        });
+
+        generarCardsProductos(productosDisponibles);
     });
 
-    generarCardsProductos(productosDisponibles);
-});
+    // Filtros por lista 
 
-// Filtros por lista 
+    const filterCategoria = document.getElementById("filter__lista");
 
-const filterCategoria = document.getElementById("filter__lista");
+    filterCategoria.addEventListener("change", () => {
+        const categoriaSeleccionada = filterCategoria.value;
 
-filterCategoria.addEventListener("change", () => {
-    const categoriaSeleccionada = filterCategoria.value;
+        if (categoriaSeleccionada === "todos") {
+            productosDisponibles = productos;
+        } else {
+            productosDisponibles = productos.filter((producto) => {
+                return producto.categoria === categoriaSeleccionada;
+            });
+        }
 
-    if (categoriaSeleccionada === "todos") {
-        productosDisponibles = productos;
-    } else {
-        productosDisponibles = productos.filter((producto) => {
-            return producto.categoria === categoriaSeleccionada;
-        });
-    }
+        generarCardsProductos(productosDisponibles);
+    });
 
-    generarCardsProductos(productosDisponibles);
-});
