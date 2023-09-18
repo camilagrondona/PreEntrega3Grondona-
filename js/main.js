@@ -311,19 +311,34 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 })
 
-// Inicio
+// Filtros por input 
 
 const filterInput = document.getElementById("filter__input")
 
-// Filtros por input 
+filterInput.addEventListener("keyup", (e) => {
+    const filtro = e.target.value.toLowerCase();
 
-    filterInput.addEventListener("keyup", (e) => {
-        const filtro = e.target.value.toLowerCase();
-
-        productosDisponibles = productos.filter((producto) => {
-            return producto.nombre.toLowerCase().includes(filtro);
-        });
-    
-        generarCardsProductos(productosDisponibles);
+    productosDisponibles = productos.filter((producto) => {
+        return producto.nombre.toLowerCase().includes(filtro);
     });
-    
+
+    generarCardsProductos(productosDisponibles);
+});
+
+// Filtros por lista 
+
+const filterCategoria = document.getElementById("filter__lista");
+
+filterCategoria.addEventListener("change", () => {
+    const categoriaSeleccionada = filterCategoria.value;
+
+    if (categoriaSeleccionada === "todos") {
+        productosDisponibles = productos;
+    } else {
+        productosDisponibles = productos.filter((producto) => {
+            return producto.categoria === categoriaSeleccionada;
+        });
+    }
+
+    generarCardsProductos(productosDisponibles);
+});
