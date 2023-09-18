@@ -29,6 +29,8 @@ class newUser {
     }
 }
 
+let usuario;
+
 /*Login*/
 
 // Evento 
@@ -42,8 +44,6 @@ btnLogin.addEventListener("click", (e) => {
     validarYlogear(user, pass)
 })
 
-/*USAR SWEET ALERT!!!!!!!!!!!!!!!!!!!!*/
-
 // Función para validar usuario y logearse
 
 const validarYlogear = (user, pass) => {
@@ -51,18 +51,35 @@ const validarYlogear = (user, pass) => {
     const userExists = usuarios.find((usuario) => usuario?.user === user)
 
     if (userExists === undefined || userExists.pass !== pass) {
-        alert("error en usuario o contraseña")
+        Swal.fire
+            ({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Error en usuario o contraseña',
+            })
     } else {
-        alert(`Bienvenido/a ${user}`)
+
         let usuario = {
             user: userExists.user,
             pass: userExists.pass,
             admin: userExists.admin
         }
-        sessionStorage.setItem("usuario", JSON.stringify(usuario))
-        location.href = "../index.html"
-    }
 
+//Sweet Alert Bienvenida
+        Swal.fire
+            ({
+                position: 'center',
+                title: 'Te damos la bienvenida a Tienda Friki',
+                showConfirmButton: false,
+                timer: 1000,
+            })
+
+// Redirección al inicio
+        setTimeout(() => {
+            sessionStorage.setItem("usuario", JSON.stringify(usuario))
+            location.href = "../index.html"
+        }, 1000);
+    }
 }
 
 /*Registro nuevos usuarios*/
@@ -85,17 +102,33 @@ btnRegister.addEventListener("click", (e) => {
 const validarYRegistrar = (nuevoUsuario) => {
 
     const userNuevo = usuarios.find((usuario) => usuario?.user === nuevoUsuario.user)
-    if(userNuevo === undefined){
+    if (userNuevo === undefined) {
 
         usuarios.push(nuevoUsuario)
         localStorage.setItem("usuarios", JSON.stringify(usuarios))
         sessionStorage.setItem("usuario", JSON.stringify(nuevoUsuario))
-        alert(`Gracias ${nuevoUsuario.user} por registrarte. Te redigiremos a la página principal`)
-        location.href = "../index.html"       
-    }else{
-        alert(`El usuario ya existe`)
-        sessionStorage.setItem("usuario", JSON.stringify(usuario))
-        location.href = "../index.html"
-    }
 
+//Sweet Alert bienvenida nuevo usuario y redirección
+        Swal.fire
+            ({
+                position: 'center',
+                title: 'Gracias por registrarte. Te redigiremos a la página principal',
+                showConfirmButton: false,
+                timer: 1000,
+            })
+
+// Redirección al inicio
+        setTimeout(() => {
+            location.href = "../index.html"
+        }, 1000);
+    } else {
+//Sweet Alert "El usuario ya existe"
+        Swal.fire
+            ({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'El usuario ya existe',
+            })
+        sessionStorage.setItem("usuario", JSON.stringify(usuario))
+    }
 }
