@@ -244,35 +244,53 @@ const comprarProducto = (productos, idProducto) => {
         }
     })
 
-    // Filtros por input 
+    // Filtros 
 
     const filterInput = document.getElementById("filter__input")
 
-    filterInput.addEventListener("keyup", (e) => {
-        const filtro = e.target.value.toLowerCase();
-
-        productosDisponibles = productos.filter((producto) => {
-            return producto.nombre.toLowerCase().includes(filtro);
-        });
-
-        generarCardsProductos(productosDisponibles);
-    });
-
-    // Filtros por lista 
-
     const filterCategoria = document.getElementById("filter__lista");
 
-    filterCategoria.addEventListener("change", () => {
-        const categoriaSeleccionada = filterCategoria.value;
+    // Función para filtrar productos
+    const filtrarProductos = (productos, filtro, categoria) => {
+    let productosFiltrados = productos
 
-        if (categoriaSeleccionada === "todos") {
-            productosDisponibles = productos;
-        } else {
-            productosDisponibles = productos.filter((producto) => {
-                return producto.categoria === categoriaSeleccionada;
+        // Filtrar por input
+        if (filtro) {
+            const filtroLowerCase = filtro.toLowerCase();
+            productosFiltrados = productosFiltrados.filter((producto) => {
+                return producto.nombre.toLowerCase().includes(filtroLowerCase);
             });
         }
-
-        generarCardsProductos(productosDisponibles);
+    
+        // Filtrar por categoría / lista
+        if (categoria && categoria !== "todos") {
+            productosFiltrados = productosFiltrados.filter((producto) => {
+                return producto.categoria === categoria;
+            });
+        }
+    
+        return productosFiltrados;
+    };
+    
+    // Evento para el input de filtro
+    filterInput.addEventListener("keyup", (e) => {
+        const filtro = e.target.value;
+        const categoriaSeleccionada = filterCategoria.value;
+        
+        // Filtrar productos y generar las tarjetas actualizadas
+        const productosFiltrados = filtrarProductos(productosDisponibles, filtro, categoriaSeleccionada);
+        generarCardsProductos(productosFiltrados);
     });
+    
+    // Evento para la lista de filtro por categoría
+    filterCategoria.addEventListener("change", () => {
+        const filtro = filterInput.value;
+        const categoriaSeleccionada = filterCategoria.value;
+    
+        // Filtrar productos y generar las tarjetas actualizadas
+        const productosFiltrados = filtrarProductos(productosDisponibles, filtro, categoriaSeleccionada);
+        generarCardsProductos(productosFiltrados);
+    });
+
+
 
