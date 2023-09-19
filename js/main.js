@@ -11,21 +11,21 @@ const cargarProductos = () => {
     fetch('./db/productos.json')
         .then((response) => {
             if (!response.ok) {
-                throw new Error('No se pudo cargar el archivo JSON de productos.');
+                throw new Error('No se pudo cargar el archivo JSON de productos.')
             }
-            return response.json();
+            return response.json()
         })
         .then((data) => {
-            productosDisponibles = data;
-            generarCardsProductos(productosDisponibles);
+            productosDisponibles = data
+            generarCardsProductos(productosDisponibles)
         })
         .catch((error) => {
-            console.error('Error al cargar los productos:', error);
+            console.error('Error al cargar los productos:', error)
         });
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-    cargarProductos();
+    cargarProductos()
 })
 
 // Generar card productos 
@@ -33,8 +33,8 @@ document.addEventListener("DOMContentLoaded", () => {
     divProductos.innerHTML = "";
 
     productosDisponibles.forEach((producto) => {
-        let card = document.createElement("div");
-        card.className = "producto";
+        let card = document.createElement("div")
+        card.className = "producto"
         card.innerHTML = `
     <div class="card" style="width: 18rem;">
     <img class="card-img-top" src="${producto.imagen}" alt="Card image cap">
@@ -44,9 +44,9 @@ document.addEventListener("DOMContentLoaded", () => {
     <p class="card-text">Precio: <b>$${producto.precio}</b></p>
     <button id="comprar${producto.id}" class="btn btn-primary">Comprar</button>
     </div>
-    </div>`;
+    </div>`
 
-        divProductos.appendChild(card);
+        divProductos.appendChild(card)
 
         const btnComprar = document.getElementById(`comprar${producto.id}`)
         btnComprar.addEventListener("click", () => comprarProducto(productosDisponibles, producto.id))
@@ -203,7 +203,7 @@ const comprarProducto = (productos, idProducto) => {
     }
     carrito = JSON.parse(localStorage.getItem("carrito"))
 
-    // Sweet Alert Carrito
+// Sweet Alert Carrito
 
     Swal.fire
         ({
@@ -214,7 +214,7 @@ const comprarProducto = (productos, idProducto) => {
             timer: 1500
         })}
 
-    // Usuarios (Botones Login / Cerrar sesión)
+// Usuarios (Botones Login / Cerrar sesión)
 
     const userLogin = document.getElementById("userLogin")
     let usuarioLogeado = JSON.parse(sessionStorage.getItem("usuario"))
@@ -244,52 +244,52 @@ const comprarProducto = (productos, idProducto) => {
         }
     })
 
-    // Filtros 
+// Filtros 
 
     const filterInput = document.getElementById("filter__input")
 
-    const filterCategoria = document.getElementById("filter__lista");
+    const filterCategoria = document.getElementById("filter__lista")
 
-    // Función para filtrar productos
+// Función para filtrar productos
     const filtrarProductos = (productos, filtro, categoria) => {
     let productosFiltrados = productos
 
-        // Filtrar por input
+// Filtrar por input
         if (filtro) {
-            const filtroLowerCase = filtro.toLowerCase();
+            const filtroLowerCase = filtro.toLowerCase()
             productosFiltrados = productosFiltrados.filter((producto) => {
-                return producto.nombre.toLowerCase().includes(filtroLowerCase);
-            });
+                return producto.nombre.toLowerCase().includes(filtroLowerCase)
+            })
         }
     
-        // Filtrar por categoría / lista
+// Filtrar por categoría / lista
         if (categoria && categoria !== "todos") {
             productosFiltrados = productosFiltrados.filter((producto) => {
-                return producto.categoria === categoria;
-            });
+                return producto.categoria === categoria
+            })
         }
     
-        return productosFiltrados;
+        return productosFiltrados
     };
     
-    // Evento para el input de filtro
+// Evento para el input de filtro
     filterInput.addEventListener("keyup", (e) => {
-        const filtro = e.target.value;
-        const categoriaSeleccionada = filterCategoria.value;
+        const filtro = e.target.value
+        const categoriaSeleccionada = filterCategoria.value
         
-        // Filtrar productos y generar las tarjetas actualizadas
-        const productosFiltrados = filtrarProductos(productosDisponibles, filtro, categoriaSeleccionada);
-        generarCardsProductos(productosFiltrados);
+// Filtrar productos y generar las tarjetas actualizadas
+        const productosFiltrados = filtrarProductos(productosDisponibles, filtro, categoriaSeleccionada)
+        generarCardsProductos(productosFiltrados)
     });
     
-    // Evento para la lista de filtro por categoría
+// Evento para la lista de filtro por categoría
     filterCategoria.addEventListener("change", () => {
-        const filtro = filterInput.value;
-        const categoriaSeleccionada = filterCategoria.value;
+        const filtro = filterInput.value
+        const categoriaSeleccionada = filterCategoria.value
     
-        // Filtrar productos y generar las tarjetas actualizadas
-        const productosFiltrados = filtrarProductos(productosDisponibles, filtro, categoriaSeleccionada);
-        generarCardsProductos(productosFiltrados);
+// Filtrar productos y generar las tarjetas actualizadas
+        const productosFiltrados = filtrarProductos(productosDisponibles, filtro, categoriaSeleccionada)
+        generarCardsProductos(productosFiltrados)
     });
 
 
